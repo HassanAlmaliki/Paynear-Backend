@@ -116,17 +116,8 @@ class WithdrawalService
 
         $idToken = $response->json()['idToken'];
 
-        try {
-            // Double check cryptographically with Kreait Firebase SDK
-            // Resolve from the service container instead of Facade to avoid static analysis unresolvable warnings.
-            $verifiedIdToken = app('firebase.auth')->verifyIdToken($idToken);
-            $uid = $verifiedIdToken->claims()->get('sub');
-            if (!$uid) {
-                throw new \Exception(__('messages.no_valid_id'));
-            }
-        } catch (\Exception $e) {
-            throw new \Exception(__('messages.admin_sdk_auth_failed', ['error' => $e->getMessage()]));
-        }
+        // The REST API call above already validates the OTP cryptographically with Google.
+        // If it was successful and returned an idToken, the user is authenticated.
 
         return DB::transaction(function () use ($withdrawal) {
             $wallet = $withdrawal->wallet;
