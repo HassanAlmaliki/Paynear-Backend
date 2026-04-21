@@ -12,8 +12,12 @@
     ],
     "routes": [
         {
-            "src": "/build/(.*)",
-            "dest": "/public/build/$1"
+            "src": "/(build|css|js|images|fonts)/(.*)",
+            "dest": "/public/$1/$2"
+        },
+        {
+            "src": "/favicon\\.ico",
+            "dest": "/public/favicon.ico"
         },
         {
             "src": "/(.*)",
