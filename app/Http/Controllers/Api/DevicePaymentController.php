@@ -18,28 +18,44 @@ class DevicePaymentController extends Controller
     /**
      * Process a payment from POS device.
      * Authenticated via API key (no Sanctum).
+     *
+     * Supports two payment methods:
+     *  - RFID card:  payment_method=rfid  + nfc_uid
+     *  - HCE phone:  payment_method=hce   + payment_token (Sanctum bearer token)
      */
     public function processPayment(Request $request)
     {
         $request->validate([
-            'api_key' => 'required|string',
-            'nfc_uid' => 'required|string',
-            'amount' => 'required|numeric|min:0.01',
+            'api_key'        => 'required|string',
+            'amount'         => 'required|numeric|min:0.01',
+            'payment_method' => 'sometimes|string|in:rfid,hce',
+            'nfc_uid'        => 'required_without:payment_token|nullable|string',
+            'payment_token'  => 'required_without:nfc_uid|nullable|string',
         ]);
 
         try {
-            $transaction = $this->paymentService->processDevicePayment(
-                $request->api_key,
-                $request->nfc_uid,
-                (float) $request->amount
-            );
+            $method = $request->input('payment_method', 'rfid');
+
+            if ($method === 'hce' && $request->filled('payment_token')) {
+                $transaction = $this->paymentService->processHcePayment(
+                    $request->api_key,
+                    $request->payment_token,
+                    (float) $request->amount
+                );
+            } else {
+                $transaction = $this->paymentService->processDevicePayment(
+                    $request->api_key,
+                    $request->nfc_uid,
+                    (float) $request->amount
+                );
+            }
 
             return response()->json([
                 'message' => __('messages.payment_successful'),
                 'transaction' => [
-                    'reference' => $transaction->reference,
-                    'amount' => $transaction->original_amount,
-                    'status' => $transaction->status,
+                    'reference'  => $transaction->reference,
+                    'amount'     => $transaction->original_amount,
+                    'status'     => $transaction->status,
                     'created_at' => $transaction->created_at->toIso8601String(),
                 ],
             ]);
