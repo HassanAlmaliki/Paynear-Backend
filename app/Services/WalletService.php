@@ -6,6 +6,7 @@ use App\Models\Wallet;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Merchant;
+use App\Notifications\BalanceUpdatedNotification;
 use Illuminate\Support\Facades\DB;
 
 class WalletService
@@ -18,7 +19,7 @@ class WalletService
         return DB::transaction(function () use ($wallet, $amount, $type) {
             $wallet->credit($amount);
 
-            return Transaction::create([
+            $transaction = Transaction::create([
                 'to_wallet_id' => $wallet->id,
                 'original_amount' => $amount,
                 'commission_amount' => 0,
@@ -26,6 +27,12 @@ class WalletService
                 'type' => $type,
                 'status' => 'completed',
             ]);
+
+            if ($wallet->owner) {
+                $wallet->owner->notify(new BalanceUpdatedNotification($amount, 'deposit', $wallet->balance));
+            }
+
+            return $transaction;
         });
     }
 
@@ -41,7 +48,7 @@ class WalletService
         return DB::transaction(function () use ($wallet, $amount) {
             $wallet->debit($amount);
 
-            return Transaction::create([
+            $transaction = Transaction::create([
                 'from_wallet_id' => $wallet->id,
                 'original_amount' => $amount,
                 'commission_amount' => 0,
@@ -49,6 +56,12 @@ class WalletService
                 'type' => 'withdrawal',
                 'status' => 'completed',
             ]);
+
+            if ($wallet->owner) {
+                $wallet->owner->notify(new BalanceUpdatedNotification($amount, 'withdrawal', $wallet->balance));
+            }
+
+            return $transaction;
         });
     }
 
@@ -69,7 +82,7 @@ class WalletService
             $fromWallet->debit($amount);
             $toWallet->credit($amount);
 
-            return Transaction::create([
+            $transaction = Transaction::create([
                 'from_wallet_id' => $fromWallet->id,
                 'to_wallet_id' => $toWallet->id,
                 'original_amount' => $amount,
@@ -79,6 +92,18 @@ class WalletService
                 'status' => 'completed',
                 'note' => $note,
             ]);
+
+            if ($fromWallet->owner) {
+                $recipientPhone = $toWallet->owner->phone ?? 'مستخدم';
+                $fromWallet->owner->notify(new BalanceUpdatedNotification($amount, 'withdrawal', $fromWallet->balance, "تم تحويل {$amount} ريال إلى {$recipientPhone}"));
+            }
+
+            if ($toWallet->owner) {
+                $senderPhone = $fromWallet->owner->phone ?? 'مستخدم';
+                $toWallet->owner->notify(new BalanceUpdatedNotification($amount, 'deposit', $toWallet->balance, "تم استلام {$amount} ريال من {$senderPhone}"));
+            }
+
+            return $transaction;
         });
     }
 
@@ -122,7 +147,7 @@ class WalletService
             $fromWallet->debit($amount);
             $toWallet->credit($amount);
 
-            return Transaction::create([
+            $transaction = Transaction::create([
                 'from_wallet_id' => $fromWallet->id,
                 'to_wallet_id' => $toWallet->id,
                 'original_amount' => $amount,
@@ -131,6 +156,16 @@ class WalletService
                 'type' => 'payment',
                 'status' => 'completed',
             ]);
+
+            if ($fromWallet->owner) {
+                $fromWallet->owner->notify(new BalanceUpdatedNotification($amount, 'withdrawal', $fromWallet->balance, "تم دفع {$amount} ريال عبر نقاط البيع"));
+            }
+
+            if ($toWallet->owner) {
+                $toWallet->owner->notify(new BalanceUpdatedNotification($amount, 'deposit', $toWallet->balance, "تم استلام دفعة {$amount} ريال عبر نقاط البيع"));
+            }
+
+            return $transaction;
         });
     }
 }

@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'profile']);
     Route::post('/user/change-password', [AuthController::class, 'changePassword']);
+    Route::post('/user/fcm-token', [AuthController::class, 'updateFcmToken']);
 
     // Wallet
     Route::get('/wallet/balance', [WalletController::class, 'balance']);

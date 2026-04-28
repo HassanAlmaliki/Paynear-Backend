@@ -147,4 +147,22 @@ class  AuthController extends Controller
             'message' => 'تم تغيير كلمة المرور بنجاح',
         ]);
     }
+
+    /**
+     * Update FCM Token.
+     */
+    public function updateFcmToken(Request $request)
+    {
+        $request->validate([
+            'fcm_token' => 'required|string',
+        ]);
+
+        $request->user()->update([
+            'fcm_token' => $request->fcm_token,
+        ]);
+
+        return response()->json([
+            'message' => 'تم تحديث توكن الإشعارات بنجاح',
+        ]);
+    }
 }
