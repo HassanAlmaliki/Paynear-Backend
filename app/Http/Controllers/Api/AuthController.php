@@ -38,7 +38,35 @@ class  AuthController extends Controller
             'password' => 'required|string|min:6|confirmed',
             'role' => 'sometimes|string|in:user,pos',
             'gender' => 'required|string|in:male,female',
+            'firebase_token' => 'required|string',
         ]);
+
+        // Validate firebase token using REST API
+        $apiKey = config('services.firebase.api_key');
+        if (!$apiKey) {
+            throw ValidationException::withMessages(['firebase_token' => ['لم يتم إعداد مفتاح API لفايربيس في السيرفر.']]);
+        }
+
+        $response = \Illuminate\Support\Facades\Http::post("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key={$apiKey}", [
+            'idToken' => $request->firebase_token,
+        ]);
+
+        if (!$response->successful() || !isset($response->json('users')[0]['phoneNumber'])) {
+            throw ValidationException::withMessages(['firebase_token' => ['رمز التحقق من Firebase غير صالح أو منتهي الصلاحية']]);
+        }
+
+        $verifiedPhone = $response->json('users')[0]['phoneNumber'];
+
+        // Normalize verified phone
+        if (str_starts_with($verifiedPhone, '0')) {
+            $verifiedPhone = '+967' . substr($verifiedPhone, 1);
+        } elseif (str_starts_with($verifiedPhone, '7')) {
+            $verifiedPhone = '+967' . $verifiedPhone;
+        }
+
+        if ($verifiedPhone !== $request->phone) {
+            throw ValidationException::withMessages(['phone' => ['رقم الهاتف المدخل لا يتطابق مع الرقم الذي تم التحقق منه عبر فايربيس.']]);
+        }
 
         $user = User::create([
             'full_name' => $request->full_name,

@@ -9,11 +9,26 @@ use App\Models\AgentCommissionTransaction;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class WithdrawalService
 {
     protected CommissionService $commissionService;
+
+    /**
+     * Firebase test phone numbers with their predetermined verification codes.
+     * These match the test numbers configured in Firebase Console.
+     * Format: 'international_phone' => 'verification_code'
+     */
+    protected static array $testPhoneNumbers = [
+        '+967774845570' => '705584',
+        '+967777391592' => '123456',
+        '+967713489161' => '654321',
+        '+967776311002' => '200311',
+        '+967777771032' => '777771',
+    ];
 
     public function __construct(CommissionService $commissionService)
     {
@@ -21,8 +36,19 @@ class WithdrawalService
     }
 
     /**
+     * Check if a phone number is a Firebase test number.
+     */
+    protected function isTestPhoneNumber(string $phone): bool
+    {
+        return array_key_exists($phone, self::$testPhoneNumbers);
+    }
+
+    /**
      * Initiate a withdrawal request.
-     * Creates a pending withdrawal and generates an OTP.
+     * Creates a pending withdrawal and sends an OTP to the user's phone.
+     *
+     * For Firebase test numbers: uses predetermined codes (no SMS sent).
+     * For real numbers: sends OTP via Firebase Identity Toolkit REST API.
      */
     public function initiate(Agent $agent, Wallet $wallet, float $requestedAmount): array
     {
@@ -42,19 +68,73 @@ class WithdrawalService
         // Format phone to international format (assumes Yemen +967) if local
         $formattedPhone = preg_match('/^7\d{8}$/', $phone) ? '+967' . $phone : $phone;
 
-        $apiKey = env('FIREBASE_API_KEY');
+        // Determine if this is a test number or real number
+        if ($this->isTestPhoneNumber($formattedPhone)) {
+            return $this->initiateWithTestNumber($agent, $wallet, $requestedAmount, $commission, $totalDeducted, $formattedPhone);
+        }
+
+        return $this->initiateWithFirebase($agent, $wallet, $requestedAmount, $commission, $totalDeducted, $formattedPhone);
+    }
+
+    /**
+     * Initiate withdrawal for Firebase test numbers.
+     * Uses predetermined codes without calling the Firebase REST API.
+     */
+    protected function initiateWithTestNumber(
+        Agent $agent, Wallet $wallet, float $requestedAmount,
+        float $commission, float $totalDeducted, string $formattedPhone
+    ): array {
+        $testCode = self::$testPhoneNumbers[$formattedPhone];
+
+        // Use a special session marker to identify test number flows
+        $sessionInfo = 'test_session_' . Str::random(32);
+
+        Log::info("Withdrawal OTP: Using test number {$formattedPhone} with code {$testCode}");
+
+        $withdrawal = DB::transaction(function () use ($agent, $wallet, $requestedAmount, $commission, $totalDeducted, $sessionInfo, $testCode) {
+            return Withdrawal::create([
+                'agent_id' => $agent->id,
+                'wallet_id' => $wallet->id,
+                'requested_amount' => $requestedAmount,
+                'commission_amount' => $commission,
+                'total_deducted_amount' => $totalDeducted,
+                'commission_type' => $agent->commission_type,
+                'commission_value' => $agent->commission_value,
+                'status' => 'pending',
+                'verification_code' => Hash::make($testCode),
+                'firebase_session_info' => $sessionInfo,
+                'expires_at' => now()->addMinutes(15),
+            ]);
+        });
+
+        return [
+            'withdrawal' => $withdrawal,
+            'commission_amount' => $commission,
+            'total_deducted' => $totalDeducted,
+        ];
+    }
+
+    /**
+     * Initiate withdrawal using Firebase Identity Toolkit REST API.
+     * Used for real (non-test) phone numbers.
+     */
+    protected function initiateWithFirebase(
+        Agent $agent, Wallet $wallet, float $requestedAmount,
+        float $commission, float $totalDeducted, string $formattedPhone
+    ): array {
+        $apiKey = config('services.firebase.api_key');
         if (!$apiKey) {
             throw new \Exception('FIREBASE_API_KEY is not configured.');
         }
 
         // Send OTP via Google Identity Toolkit
-        $response = \Illuminate\Support\Facades\Http::post("https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key={$apiKey}", [
+        $response = Http::post("https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key={$apiKey}", [
             'phoneNumber' => $formattedPhone,
         ]);
 
         if (!$response->successful() || !isset($response->json()['sessionInfo'])) {
             $error = $response->json()['error']['message'] ?? 'Unknown error';
-            \Illuminate\Support\Facades\Log::error("Firebase Send SMS Error: " . $error);
+            Log::error("Firebase Send SMS Error: " . $error);
             throw new \Exception(__('messages.firebase_send_error', ['error' => $error]));
         }
 
@@ -70,7 +150,7 @@ class WithdrawalService
                 'commission_type' => $agent->commission_type,
                 'commission_value' => $agent->commission_value,
                 'status' => 'pending',
-                'verification_code' => Hash::make(Str::random(10)), // Placeholder value
+                'verification_code' => Hash::make(Str::random(10)),
                 'firebase_session_info' => $sessionInfo,
                 'expires_at' => now()->addMinutes(15),
             ]);
@@ -85,6 +165,9 @@ class WithdrawalService
 
     /**
      * Verify OTP and complete the withdrawal.
+     *
+     * For test numbers: verifies code against the stored hash.
+     * For real numbers: verifies via Firebase REST API.
      */
     public function verifyAndComplete(Withdrawal $withdrawal, string $otp): Withdrawal
     {
@@ -101,10 +184,39 @@ class WithdrawalService
             throw new \Exception(__('messages.invalid_session'));
         }
 
-        $apiKey = env('FIREBASE_API_KEY');
-        
-        // Authenticate with Firebase using sessionInfo and code
-        $response = \Illuminate\Support\Facades\Http::post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key={$apiKey}", [
+        // Determine if this was a test number flow
+        $isTestSession = str_starts_with($withdrawal->firebase_session_info, 'test_session_');
+
+        if ($isTestSession) {
+            $this->verifyTestOtp($withdrawal, $otp);
+        } else {
+            $this->verifyFirebaseOtp($withdrawal, $otp);
+        }
+
+        // OTP verified successfully — complete the withdrawal
+        return $this->completeWithdrawal($withdrawal);
+    }
+
+    /**
+     * Verify OTP for test phone numbers using the stored hash.
+     */
+    protected function verifyTestOtp(Withdrawal $withdrawal, string $otp): void
+    {
+        if (!Hash::check($otp, $withdrawal->verification_code)) {
+            throw new \Exception(__('messages.verification_failed', ['error' => __('messages.invalid_code')]));
+        }
+
+        Log::info("Withdrawal #{$withdrawal->id}: Test OTP verified successfully.");
+    }
+
+    /**
+     * Verify OTP via Firebase Identity Toolkit REST API.
+     */
+    protected function verifyFirebaseOtp(Withdrawal $withdrawal, string $otp): void
+    {
+        $apiKey = config('services.firebase.api_key');
+
+        $response = Http::post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key={$apiKey}", [
             'sessionInfo' => $withdrawal->firebase_session_info,
             'code' => $otp,
         ]);
@@ -114,11 +226,15 @@ class WithdrawalService
             throw new \Exception(__('messages.verification_failed', ['error' => $error]));
         }
 
-        $idToken = $response->json()['idToken'];
+        Log::info("Withdrawal #{$withdrawal->id}: Firebase OTP verified successfully.");
+    }
 
-        // The REST API call above already validates the OTP cryptographically with Google.
-        // If it was successful and returned an idToken, the user is authenticated.
-
+    /**
+     * Complete the withdrawal after OTP verification.
+     * Deducts balance, records transactions, credits agent commission.
+     */
+    protected function completeWithdrawal(Withdrawal $withdrawal): Withdrawal
+    {
         return DB::transaction(function () use ($withdrawal) {
             $wallet = $withdrawal->wallet;
             $agent = $withdrawal->agent;
