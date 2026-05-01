@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 // Public routes (no auth)
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 // Device payment (API Key auth, not Sanctum)
 Route::post('/device/process-payment', [DevicePaymentController::class, 'processPayment']);
