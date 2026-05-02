@@ -29,7 +29,7 @@ class BalanceUpdatedNotification extends Notification implements ShouldQueue
         $this->newBalance = $newBalance;
         
         $this->message = $message ?? ($type === 'deposit' || $type === 'incoming' 
-            ? "تم إضافة {$amount} ريال إلى رصيدك." 
+            ? "تم إيداع {$amount} إلى حسابك" 
             : "تم خصم {$amount} ريال من رصيدك.");
     }
 

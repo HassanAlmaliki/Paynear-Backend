@@ -133,7 +133,7 @@ class WalletController extends Controller
 
             $agentName = $otherParty
                 ? ($otherParty->full_name ?? $otherParty->merchant_name ?? 'مستخدم PayNear')
-                : ($tx->type === 'deposit' ? 'إيداع' : 'عملية');
+                : ($tx->type === 'deposit' ? "تم إيداع " . (float)$tx->original_amount : 'عملية');
 
             // Map backend type to Flutter-friendly type
             $flutterType = match ($tx->type) {
