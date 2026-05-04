@@ -8,10 +8,21 @@ use App\Models\Merchant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
 class  AuthController extends Controller
 {
+    /**
+     * Maximum login attempts before lockout.
+     */
+    private const MAX_LOGIN_ATTEMPTS = 3;
+
+    /**
+     * Lockout duration in seconds (5 minutes).
+     */
+    private const LOCKOUT_DURATION = 300;
+
     /**
      * Format phone number to standard format.
      */
@@ -22,6 +33,16 @@ class  AuthController extends Controller
         if (str_starts_with($phone, '0')) return '+967' . substr($phone, 1);
         if (str_starts_with($phone, '7')) return '+967' . $phone;
         return $phone;
+    }
+
+    /**
+     * Generate the throttle key for login rate limiting.
+     */
+    private function throttleKey(Request $request): string
+    {
+        $phone = $this->formatPhone($request->phone);
+        $userType = $request->user_type ?? 'customer';
+        return 'login:' . $phone . ':' . $userType;
     }
 
     /**
@@ -119,6 +140,18 @@ class  AuthController extends Controller
             'user_type' => 'required|string|in:customer,merchant',
         ]);
 
+        $throttleKey = $this->throttleKey($request);
+
+        // Check if the user is rate-limited
+        if (RateLimiter::tooManyAttempts($throttleKey, self::MAX_LOGIN_ATTEMPTS)) {
+            $retryAfter = RateLimiter::availableIn($throttleKey);
+            return response()->json([
+                'message' => 'تم تجاوز عدد المحاولات المسموح بها. حاول بعد ' . ceil($retryAfter / 60) . ' دقائق.',
+                'retry_after' => $retryAfter,
+                'lockout_until' => now()->addSeconds($retryAfter)->toIso8601String(),
+            ], 429);
+        }
+
         if ($request->user_type === 'merchant') {
             $user = Merchant::where('phone', $request->phone)->first();
         } else {
@@ -126,8 +159,13 @@ class  AuthController extends Controller
         }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
+            // Record a failed attempt (decays after LOCKOUT_DURATION seconds)
+            RateLimiter::hit($throttleKey, self::LOCKOUT_DURATION);
+
+            $attemptsLeft = RateLimiter::remaining($throttleKey, self::MAX_LOGIN_ATTEMPTS);
+
             throw ValidationException::withMessages([
-                'phone' => ['بيانات الدخول غير صحيحة'],
+                'phone' => ["بيانات الدخول غير صحيحة. المحاولات المتبقية: {$attemptsLeft}"],
             ]);
         }
 
@@ -136,6 +174,9 @@ class  AuthController extends Controller
                 'message' => 'حسابك غير نشط. يرجى التواصل مع الدعم الفني.',
             ], 403);
         }
+
+        // Clear rate limiter on successful login
+        RateLimiter::clear($throttleKey);
 
         $token = $user->createToken('mobile-app')->plainTextToken;
 
