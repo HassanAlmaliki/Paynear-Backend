@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Merchant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -32,12 +33,14 @@ class  AuthController extends Controller
             $request->merge(['phone' => $this->formatPhone($request->phone)]);
         }
 
+        $table = $request->user_type === 'merchant' ? 'merchants' : 'users';
+
         $request->validate([
             'full_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20|unique:users,phone',
+            'phone' => "required|string|max:20|unique:{$table},phone",
             'password' => 'required|string|min:6|confirmed',
-            'role' => 'sometimes|string|in:user,pos',
-            'gender' => 'required|string|in:male,female',
+            'user_type' => 'required|string|in:customer,merchant',
+            'gender' => 'required_if:user_type,customer|string|in:male,female',
             'firebase_token' => 'required|string',
         ]);
 
@@ -68,22 +71,35 @@ class  AuthController extends Controller
             throw ValidationException::withMessages(['phone' => ['رقم الهاتف المدخل لا يتطابق مع الرقم الذي تم التحقق منه عبر فايربيس.']]);
         }
 
-        $user = User::create([
-            'full_name' => $request->full_name,
-            'phone' => $request->phone,
-            'password' => $request->password,
-            'role' => $request->role ?? 'user',
-            'gender' => $request->gender,
-        ]);
+        if ($request->user_type === 'merchant') {
+            $user = Merchant::create([
+                'merchant_name' => $request->full_name,
+                'phone' => $request->phone,
+                'password' => $request->password,
+                'status' => 'active',
+                'is_verified' => false,
+            ]);
+        } else {
+            $user = User::create([
+                'full_name' => $request->full_name,
+                'phone' => $request->phone,
+                'password' => $request->password,
+                'role' => 'user',
+                'gender' => $request->gender,
+            ]);
+        }
 
-        // Create wallet for the user
+        // Create wallet for the user/merchant
         $user->getOrCreateWallet();
 
         $token = $user->createToken('mobile-app')->plainTextToken;
 
+        $userModelData = $user->load('wallet', 'profile')->toArray();
+        $userModelData['user_type'] = $request->user_type; // Inject user_type for frontend
+
         return response()->json([
             'message' => 'تم إنشاء الحساب بنجاح',
-            'user' => $user->load('wallet', 'profile'),
+            'user' => $userModelData,
             'token' => $token,
         ], 201);
     }
@@ -100,9 +116,14 @@ class  AuthController extends Controller
         $request->validate([
             'phone' => 'required|string',
             'password' => 'required|string',
+            'user_type' => 'required|string|in:customer,merchant',
         ]);
 
-        $user = User::where('phone', $request->phone)->first();
+        if ($request->user_type === 'merchant') {
+            $user = Merchant::where('phone', $request->phone)->first();
+        } else {
+            $user = User::where('phone', $request->phone)->first();
+        }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
@@ -118,9 +139,12 @@ class  AuthController extends Controller
 
         $token = $user->createToken('mobile-app')->plainTextToken;
 
+        $userModelData = $user->load('wallet', 'profile')->toArray();
+        $userModelData['user_type'] = $request->user_type; // Inject user_type for frontend
+
         return response()->json([
             'message' => 'تم تسجيل الدخول بنجاح',
-            'user' => $user->load('wallet', 'profile'),
+            'user' => $userModelData,
             'token' => $token,
         ]);
     }
@@ -185,6 +209,7 @@ class  AuthController extends Controller
         $request->validate([
             'phone' => 'required|string',
             'password' => 'required|string|min:6|confirmed',
+            'user_type' => 'required|string|in:customer,merchant',
             'firebase_token' => 'required|string',
         ]);
 
@@ -215,7 +240,12 @@ class  AuthController extends Controller
             throw ValidationException::withMessages(['phone' => ['رقم الهاتف المدخل لا يتطابق مع الرقم الذي تم التحقق منه عبر فايربيس.']]);
         }
 
-        $user = User::where('phone', $request->phone)->first();
+        if ($request->user_type === 'merchant') {
+            $user = Merchant::where('phone', $request->phone)->first();
+        } else {
+            $user = User::where('phone', $request->phone)->first();
+        }
+
         if (!$user) {
             throw ValidationException::withMessages(['phone' => ['المستخدم غير موجود.']]);
         }
