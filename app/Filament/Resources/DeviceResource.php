@@ -87,9 +87,8 @@ class DeviceResource extends Resource
                     ->copyable(),
                 Tables\Columns\TextColumn::make('api_key')
                     ->label(__('messages.api_key'))
-                    ->limit(20)
                     ->copyable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('merchant.merchant_name')
                     ->label(__('messages.linked_merchant'))
                     ->default(__('messages.unlinked'))
