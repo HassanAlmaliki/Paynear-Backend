@@ -131,9 +131,17 @@ class WalletController extends Controller
                 $otherParty = null;
             }
 
-            $agentName = $otherParty
-                ? ($otherParty->full_name ?? $otherParty->merchant_name ?? 'مستخدم PayNear')
-                : ($tx->type === 'deposit' ? "تم إيداع " . (float)$tx->original_amount : 'عملية');
+            if ($otherParty) {
+                // P2P transfer or payment - show the other user's name
+                $agentName = $otherParty->full_name ?? $otherParty->merchant_name ?? 'مستخدم PayNear';
+            } else {
+                // Agent operation (no other party) - show descriptive text
+                $agentName = match ($tx->type) {
+                    'deposit' => 'تم إيداع',
+                    'withdrawal' => 'تم سحب',
+                    default => 'عملية',
+                };
+            }
 
             // Map backend type to Flutter-friendly type
             $flutterType = match ($tx->type) {
