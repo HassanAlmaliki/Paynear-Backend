@@ -2,17 +2,15 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
+
 use Illuminate\Notifications\Notification;
 use Kreait\Firebase\Contract\Messaging;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification as FcmNotification;
 use Illuminate\Support\Facades\Log;
 
-class BalanceUpdatedNotification extends Notification implements ShouldQueue
+class BalanceUpdatedNotification extends Notification
 {
-    use Queueable;
 
     public $amount;
     public $type;

@@ -18,6 +18,7 @@ class Merchant extends Authenticatable
         'license_number',
         'is_verified',
         'status',
+        'fcm_token',
     ];
 
     protected $hidden = [

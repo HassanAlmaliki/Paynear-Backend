@@ -9,6 +9,14 @@ use Illuminate\Http\Request;
 class NotificationController extends Controller
 {
     /**
+     * Resolve the notifiable_type for the currently authenticated user.
+     */
+    private function notifiableType(object $user): string
+    {
+        return get_class($user); // Returns App\Models\User or App\Models\Merchant
+    }
+
+    /**
      * Get user notifications.
      * Returns format matching Flutter NotificationModel expectations.
      */
@@ -17,7 +25,7 @@ class NotificationController extends Controller
         $user = $request->user();
 
         $notifications = Notification::where('notifiable_id', $user->id)
-            ->where('notifiable_type', 'App\\Models\\User')
+            ->where('notifiable_type', $this->notifiableType($user))
             ->latest()
             ->paginate(20);
 
@@ -44,7 +52,7 @@ class NotificationController extends Controller
 
         $notification = Notification::where('id', $id)
             ->where('notifiable_id', $user->id)
-            ->where('notifiable_type', 'App\\Models\\User')
+            ->where('notifiable_type', $this->notifiableType($user))
             ->firstOrFail();
 
         $notification->markAsRead();
@@ -62,7 +70,7 @@ class NotificationController extends Controller
         $user = $request->user();
 
         $count = Notification::where('notifiable_id', $user->id)
-            ->where('notifiable_type', 'App\\Models\\User')
+            ->where('notifiable_type', $this->notifiableType($user))
             ->unread()
             ->count();
 
@@ -75,12 +83,12 @@ class NotificationController extends Controller
      * Helper: Create a notification for a user.
      * Callable from other controllers/services.
      */
-    public static function createForUser(int $userId, string $type, array $data): Notification
+    public static function createForUser(int $userId, string $type, array $data, string $notifiableType = 'App\\Models\\User'): Notification
     {
         return Notification::create([
             'type' => $type,
             'notifiable_id' => $userId,
-            'notifiable_type' => 'App\\Models\\User',
+            'notifiable_type' => $notifiableType,
             'data' => $data,
         ]);
     }
