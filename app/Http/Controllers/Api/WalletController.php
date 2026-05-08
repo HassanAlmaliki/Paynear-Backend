@@ -198,6 +198,10 @@ class WalletController extends Controller
      */
     public function linkCard(Request $request)
     {
+        if ($request->has('nfc_uid')) {
+            $request->merge(['nfc_uid' => strtoupper($request->nfc_uid)]);
+        }
+
         $request->validate([
             'nfc_uid' => 'required|string',
         ]);
