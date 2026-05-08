@@ -236,4 +236,42 @@ class WalletController extends Controller
             'card' => $card,
         ]);
     }
+
+    /**
+     * Get all linked cards for the user's wallet.
+     */
+    public function cards(Request $request)
+    {
+        $user = $request->user();
+        $wallet = $user->getOrCreateWallet();
+
+        $cards = Card::where('wallet_id', $wallet->id)->get();
+
+        return response()->json([
+            'cards' => $cards,
+        ]);
+    }
+
+    /**
+     * Unlink a specific card from the user's wallet.
+     */
+    public function unlinkCard(Request $request, $id)
+    {
+        $user = $request->user();
+        $wallet = $user->getOrCreateWallet();
+
+        $card = Card::where('id', $id)->where('wallet_id', $wallet->id)->first();
+
+        if (!$card) {
+            return response()->json([
+                'message' => 'لم يتم العثور على البطاقة المحددة في حسابك',
+            ], 404);
+        }
+
+        $card->delete();
+
+        return response()->json([
+            'message' => 'تم إلغاء ربط البطاقة بنجاح',
+        ]);
+    }
 }

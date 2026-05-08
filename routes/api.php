@@ -40,7 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/transfer/p2p', [WalletController::class, 'transfer']);
     Route::get('/transactions', [WalletController::class, 'transactions']);
     Route::post('/wallet/lookup', [WalletController::class, 'lookupRecipient']);
+    Route::get('/wallet/cards', [WalletController::class, 'cards']);
     Route::post('/wallet/link-card', [WalletController::class, 'linkCard']);
+    Route::delete('/wallet/cards/{id}', [WalletController::class, 'unlinkCard']);
 
     // Stripe Deposit
     Route::post('/wallet/deposit/stripe', [StripeDepositController::class, 'createPaymentIntent']);
