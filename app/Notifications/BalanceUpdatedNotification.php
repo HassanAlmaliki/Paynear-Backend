@@ -38,34 +38,50 @@ class BalanceUpdatedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        // Send FCM push notification separately (not inside toArray)
+        $this->sendFcmPush($notifiable);
+
         return ['database'];
     }
 
     /**
+     * Send FCM push notification to the device.
+     * Separated from toArray() to avoid side effects during data serialization.
+     */
+    private function sendFcmPush(object $notifiable): void
+    {
+        if (empty($notifiable->fcm_token)) {
+            Log::info("FCM Skip: No fcm_token for {$notifiable->getMorphClass()} #{$notifiable->id}");
+            return;
+        }
+
+        $title = $this->type === 'deposit' || $this->type === 'incoming' ? 'إيداع رصيد' : 'عملية مالية';
+
+        try {
+            $messaging = app(Messaging::class);
+            $message = CloudMessage::withTarget('token', $notifiable->fcm_token)
+                ->withNotification(FcmNotification::create($title, $this->message))
+                ->withData([
+                    'type' => 'balance_update',
+                    'amount' => (string) $this->amount,
+                    'new_balance' => (string) $this->newBalance,
+                ]);
+            $messaging->send($message);
+            Log::info("FCM Sent: to {$notifiable->getMorphClass()} #{$notifiable->id}");
+        } catch (\Exception $e) {
+            Log::error("FCM Send Error for {$notifiable->getMorphClass()} #{$notifiable->id}: " . $e->getMessage());
+        }
+    }
+
+    /**
      * Get the array representation of the notification.
+     * This is stored in the database 'data' column as JSON.
      *
      * @return array<string, mixed>
      */
     public function toArray(object $notifiable): array
     {
         $title = $this->type === 'deposit' || $this->type === 'incoming' ? 'إيداع رصيد' : 'عملية مالية';
-        
-        // Send FCM Notification manually since there's no native channel in this package
-        if (!empty($notifiable->fcm_token)) {
-            try {
-                $messaging = app(Messaging::class);
-                $message = CloudMessage::withTarget('token', $notifiable->fcm_token)
-                    ->withNotification(FcmNotification::create($title, $this->message))
-                    ->withData([
-                        'type' => 'balance_update',
-                        'amount' => (string) $this->amount,
-                        'new_balance' => (string) $this->newBalance,
-                    ]);
-                $messaging->send($message);
-            } catch (\Exception $e) {
-                Log::error("FCM Send Error: " . $e->getMessage());
-            }
-        }
 
         return [
             'title' => $title,
