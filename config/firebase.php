@@ -51,6 +51,8 @@ return [
              */
 
             'credentials' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
+            // On Vercel: Set FIREBASE_CREDENTIALS env var to the full JSON content of service-account.json
+            // Locally: Set FIREBASE_CREDENTIALS=storage/app/firebase/service-account.json in .env
 
             /*
              * ------------------------------------------------------------------------
