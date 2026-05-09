@@ -1,0 +1,498 @@
+[
+    {
+        "id": "00336db2-24bc-4d65-a961-690974b1ddcc",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 880 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 880,
+            "type": "deposit",
+            "new_balance": "107833.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-09T00:42:11.000000Z",
+        "updated_at": "2026-05-09T00:42:11.000000Z"
+    },
+    {
+        "id": "031f39ef-e481-4626-ae37-d94da63a45a9",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 555 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 555,
+            "type": "withdrawal",
+            "new_balance": "8566.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:41:37.000000Z",
+        "updated_at": "2026-05-08T22:41:37.000000Z"
+    },
+    {
+        "id": "03511b08-e869-4311-b167-c7d07710d116",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 552 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 552,
+            "type": "withdrawal",
+            "new_balance": "9121.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:40:20.000000Z",
+        "updated_at": "2026-05-08T22:40:20.000000Z"
+    },
+    {
+        "id": "086ab427-1158-4ceb-8842-ec62198a117e",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 555 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 555,
+            "type": "withdrawal",
+            "new_balance": "16445.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:36:13.000000Z",
+        "updated_at": "2026-05-08T22:36:13.000000Z"
+    },
+    {
+        "id": "0df9f5da-bdf3-43b5-ac6e-8b323e134824",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 7 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 7,
+            "type": "deposit",
+            "new_balance": "96991.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:56:30.000000Z",
+        "updated_at": "2026-05-08T22:56:30.000000Z"
+    },
+    {
+        "id": "0e10fd9c-79e1-4bb5-a6b2-54e26d673938",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0625\u064a\u062f\u0627\u0639 5000 \u0625\u0644\u0649 \u062d\u0633\u0627\u0628\u0643",
+            "amount": 5000,
+            "type": "deposit",
+            "new_balance": "14000.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-07T18:59:11.000000Z",
+        "updated_at": "2026-05-07T18:59:11.000000Z"
+    },
+    {
+        "id": "13f7d5d7-5e17-4886-8fc1-ec70d3dce783",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 5555 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 5555,
+            "type": "deposit",
+            "new_balance": "86110.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:38:00.000000Z",
+        "updated_at": "2026-05-08T22:38:00.000000Z"
+    },
+    {
+        "id": "2f94e31a-9acc-45ad-95df-4f42e20a76d9",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 5 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 5,
+            "type": "deposit",
+            "new_balance": "96996.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:05:29.000000Z",
+        "updated_at": "2026-05-08T23:05:29.000000Z"
+    },
+    {
+        "id": "3afc81c3-61d1-4c9e-97ea-2b104ac6b314",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 552 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 552,
+            "type": "withdrawal",
+            "new_balance": "10338.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:38:36.000000Z",
+        "updated_at": "2026-05-08T22:38:36.000000Z"
+    },
+    {
+        "id": "4a0b4682-6b35-4ee7-82ef-e6061456e730",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 3000 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 3000,
+            "type": "deposit",
+            "new_balance": "106073.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:48:46.000000Z",
+        "updated_at": "2026-05-08T23:48:46.000000Z"
+    },
+    {
+        "id": "513aa67a-11f4-4934-b749-e0fc91e26345",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 3000 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 3000,
+            "type": "withdrawal",
+            "new_balance": "20927.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:48:45.000000Z",
+        "updated_at": "2026-05-08T23:48:45.000000Z"
+    },
+    {
+        "id": "51ad5c21-a624-450a-b1f2-cd840b993f7f",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 665 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 665,
+            "type": "withdrawal",
+            "new_balance": "9673.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:39:18.000000Z",
+        "updated_at": "2026-05-08T22:39:18.000000Z"
+    },
+    {
+        "id": "6a8c9d78-a8ad-411d-b16f-8383e1af07c8",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 5522 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 5522,
+            "type": "deposit",
+            "new_balance": "103073.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:36:22.000000Z",
+        "updated_at": "2026-05-08T23:36:22.000000Z"
+    },
+    {
+        "id": "72041f0b-e393-44d3-92bd-5daae2cd05f5",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 555 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 555,
+            "type": "deposit",
+            "new_balance": "80555.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:36:13.000000Z",
+        "updated_at": "2026-05-08T22:36:13.000000Z"
+    },
+    {
+        "id": "773c1637-cb73-46f0-a6af-19a2222e602e",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 880 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 880,
+            "type": "withdrawal",
+            "new_balance": "19167.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-09T00:42:11.000000Z",
+        "updated_at": "2026-05-09T00:42:11.000000Z"
+    },
+    {
+        "id": "89f3d0d8-7fb8-4069-a901-ded81d5510ed",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 8550 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 8550,
+            "type": "deposit",
+            "new_balance": "96984.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:52:26.000000Z",
+        "updated_at": "2026-05-08T22:52:26.000000Z"
+    },
+    {
+        "id": "983030b5-abae-4f4a-9908-001aee9dd745",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 555 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 555,
+            "type": "deposit",
+            "new_balance": "88434.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:41:37.000000Z",
+        "updated_at": "2026-05-08T22:41:37.000000Z"
+    },
+    {
+        "id": "99fd5be7-6b5f-4d3e-b79d-6ff59e2ce211",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0625\u064a\u062f\u0627\u0639 3000 \u0625\u0644\u0649 \u062d\u0633\u0627\u0628\u0643",
+            "amount": 3000,
+            "type": "deposit",
+            "new_balance": "17000.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-07T21:11:58.000000Z",
+        "updated_at": "2026-05-07T21:11:58.000000Z"
+    },
+    {
+        "id": "b04c04b1-4969-430b-ae97-3a507698fc5e",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 5 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 5,
+            "type": "withdrawal",
+            "new_balance": "4.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:05:29.000000Z",
+        "updated_at": "2026-05-08T23:05:29.000000Z"
+    },
+    {
+        "id": "bcbc67d8-3a06-4e33-b800-f731d7aca3f6",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 555 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 555,
+            "type": "deposit",
+            "new_balance": "97551.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:34:46.000000Z",
+        "updated_at": "2026-05-08T23:34:46.000000Z"
+    },
+    {
+        "id": "c3182d70-e826-4621-b7c6-91bd6c20ed0c",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0625\u064a\u062f\u0627\u0639 30000 \u0625\u0644\u0649 \u062d\u0633\u0627\u0628\u0643",
+            "amount": 30000,
+            "type": "deposit",
+            "new_balance": "30004.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:11:15.000000Z",
+        "updated_at": "2026-05-08T23:11:15.000000Z"
+    },
+    {
+        "id": "d1dbc7cc-e2f8-4f60-bfa8-05cb684718f9",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 555 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 555,
+            "type": "withdrawal",
+            "new_balance": "29449.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:34:45.000000Z",
+        "updated_at": "2026-05-08T23:34:45.000000Z"
+    },
+    {
+        "id": "d5611ea8-954c-4d49-aeae-e58e12af9646",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 552 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 552,
+            "type": "deposit",
+            "new_balance": "86662.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:38:37.000000Z",
+        "updated_at": "2026-05-08T22:38:37.000000Z"
+    },
+    {
+        "id": "da8935bd-b56e-491a-9815-168e85681c4e",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 552 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 552,
+            "type": "deposit",
+            "new_balance": "87879.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:40:20.000000Z",
+        "updated_at": "2026-05-08T22:40:20.000000Z"
+    },
+    {
+        "id": "daf183b6-ad1c-4bea-9e4c-02bd3cdce464",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 880 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 880,
+            "type": "deposit",
+            "new_balance": "106953.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:49:42.000000Z",
+        "updated_at": "2026-05-08T23:49:42.000000Z"
+    },
+    {
+        "id": "e025e8db-7cb1-487d-a4fb-336eaa2ddf6c",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 880 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 880,
+            "type": "withdrawal",
+            "new_balance": "20047.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:49:41.000000Z",
+        "updated_at": "2026-05-08T23:49:41.000000Z"
+    },
+    {
+        "id": "e8fcabea-5078-450c-a809-9176ae844dd2",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 5555 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 5555,
+            "type": "withdrawal",
+            "new_balance": "10890.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:37:59.000000Z",
+        "updated_at": "2026-05-08T22:37:59.000000Z"
+    },
+    {
+        "id": "eb69f1aa-cd7f-4b72-ac05-ec68ba20d77f",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 7 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 7,
+            "type": "withdrawal",
+            "new_balance": "9.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:56:30.000000Z",
+        "updated_at": "2026-05-08T22:56:30.000000Z"
+    },
+    {
+        "id": "f4342775-7bf2-42d1-a91e-f15afe222bd6",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 5522 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 5522,
+            "type": "withdrawal",
+            "new_balance": "23927.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T23:36:21.000000Z",
+        "updated_at": "2026-05-08T23:36:21.000000Z"
+    },
+    {
+        "id": "f641a114-4b3f-4ead-aa2e-d366a9aded11",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "merchant",
+        "notifiable_id": 30001,
+        "data": {
+            "title": "\u0625\u064a\u062f\u0627\u0639 \u0631\u0635\u064a\u062f",
+            "body": "\u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u062f\u0641\u0639\u0629 665 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 665,
+            "type": "deposit",
+            "new_balance": "87327.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:39:18.000000Z",
+        "updated_at": "2026-05-08T22:39:18.000000Z"
+    },
+    {
+        "id": "fe4fa176-ac52-447b-a175-d1abaf22050b",
+        "type": "App\\Notifications\\BalanceUpdatedNotification",
+        "notifiable_type": "user",
+        "notifiable_id": 458691,
+        "data": {
+            "title": "\u0639\u0645\u0644\u064a\u0629 \u0645\u0627\u0644\u064a\u0629",
+            "body": "\u062a\u0645 \u062f\u0641\u0639 8550 \u0631\u064a\u0627\u0644 \u0639\u0628\u0631 \u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064a\u0639",
+            "amount": 8550,
+            "type": "withdrawal",
+            "new_balance": "16.00"
+        },
+        "read_at": null,
+        "created_at": "2026-05-08T22:52:26.000000Z",
+        "updated_at": "2026-05-08T22:52:26.000000Z"
+    }
+]

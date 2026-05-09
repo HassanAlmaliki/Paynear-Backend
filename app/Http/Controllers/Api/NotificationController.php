@@ -13,7 +13,7 @@ class NotificationController extends Controller
      */
     private function notifiableType(object $user): string
     {
-        return get_class($user); // Returns App\Models\User or App\Models\Merchant
+        return $user->getMorphClass();
     }
 
     /**
