@@ -26,6 +26,45 @@ Route::post('/device/process-payment', [DevicePaymentController::class, 'process
 // Webhooks
 Route::post('/webhooks/stripe', [\App\Http\Controllers\StripeWebhookController::class, 'handle']);
 
+// Temporary: Firebase diagnostic (DELETE after testing)
+Route::get('/debug/firebase', function () {
+    $result = ['step' => 'start'];
+    
+    // 1. Check env var
+    $creds = env('FIREBASE_CREDENTIALS');
+    $result['credentials_type'] = $creds ? (str_starts_with(trim($creds), '{') ? 'JSON_STRING' : 'FILE_PATH:' . $creds) : 'NOT_SET';
+    
+    // 2. Check if file exists (if it's a path)
+    if ($creds && !str_starts_with(trim($creds), '{')) {
+        $result['file_exists'] = file_exists(base_path($creds));
+    }
+    
+    // 3. Try to create Messaging instance
+    try {
+        $messaging = app(\Kreait\Firebase\Contract\Messaging::class);
+        $result['messaging'] = 'OK';
+    } catch (\Exception $e) {
+        $result['messaging'] = 'ERROR: ' . $e->getMessage();
+        return response()->json($result);
+    }
+    
+    // 4. Try sending to a test token
+    try {
+        $token = \DB::table('users')->whereNotNull('fcm_token')->value('fcm_token');
+        $result['has_token'] = $token ? true : false;
+        if ($token) {
+            $msg = \Kreait\Firebase\Messaging\CloudMessage::withTarget('token', $token)
+                ->withNotification(\Kreait\Firebase\Messaging\Notification::create('تشخيص', 'اختبار من Vercel'));
+            $messaging->send($msg);
+            $result['send'] = 'OK';
+        }
+    } catch (\Exception $e) {
+        $result['send'] = 'ERROR: ' . $e->getMessage();
+    }
+    
+    return response()->json($result);
+});
+
 // Protected routes (Sanctum)
 Route::middleware('auth:sanctum')->group(function () {
 
