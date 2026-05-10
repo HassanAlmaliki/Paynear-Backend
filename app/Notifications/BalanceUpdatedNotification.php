@@ -68,6 +68,10 @@ class BalanceUpdatedNotification extends Notification
                 ]);
             $messaging->send($message);
             Log::info("FCM Sent: to {$notifiable->getMorphClass()} #{$notifiable->id}");
+        } catch (\Kreait\Firebase\Exception\Messaging\NotFound $e) {
+            // Token is expired or invalid — clear it so the app registers a fresh one on next login
+            Log::warning("FCM Token expired for {$notifiable->getMorphClass()} #{$notifiable->id}, clearing stale token");
+            $notifiable->update(['fcm_token' => null]);
         } catch (\Exception $e) {
             Log::error("FCM Send Error for {$notifiable->getMorphClass()} #{$notifiable->id}: " . $e->getMessage());
         }
